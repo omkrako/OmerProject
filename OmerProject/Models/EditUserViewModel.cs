@@ -4,10 +4,10 @@ namespace OmerProject.Models
 {
     public class EditUserViewModel
     {
-        public string Id { get; set; }
+        public required string Id { get; set; }
 
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public required string Email { get; set; }
     }
 }

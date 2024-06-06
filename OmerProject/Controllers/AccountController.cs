@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OmerProject.Models;
+using OmerProject.Services;
 using OmerProject.ViewModels;
 using System.Threading.Tasks;
 
@@ -10,11 +11,13 @@ namespace OmerProject.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly LoginCounterService _loginCounterService;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, LoginCounterService loginCounterService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _loginCounterService = loginCounterService;
         }
 
         [HttpGet]
@@ -32,6 +35,7 @@ namespace OmerProject.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    _loginCounterService.Increment();
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
                 }
@@ -57,6 +61,7 @@ namespace OmerProject.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    _loginCounterService.Increment();
                     return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OmerProject.Models;
+using OmerProject.Services;
 using System.Diagnostics;
 
 namespace OmerProject.Controllers
@@ -7,14 +8,17 @@ namespace OmerProject.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly LoginCounterService _loginCounterService;
+        
+        public HomeController(ILogger<HomeController> logger, LoginCounterService loginCounterService)
         {
+            _loginCounterService = loginCounterService;
             _logger = logger;
         }
 
         public IActionResult Index()
         {
+            ViewData["VisitorCount"] = _loginCounterService.GetCount();
             return View();
         }
 
