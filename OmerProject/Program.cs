@@ -13,6 +13,23 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequiredLength = 3;
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredUniqueChars = 1;
+});
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+    options.SlidingExpiration = true;
+});
+
 builder.Services.AddSingleton<LoginCounterService>();
 
 builder.Services.AddAuthentication(options =>
@@ -21,6 +38,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
     options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
 });
+
 
 builder.Services.AddControllersWithViews();
 
