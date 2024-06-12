@@ -12,7 +12,5 @@ namespace OmerProject.Data
         {
         }
 
-        public new DbSet<User> Users { get; set; }
-
     }
 }
