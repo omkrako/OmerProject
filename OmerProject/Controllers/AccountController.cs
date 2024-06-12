@@ -37,7 +37,7 @@ namespace OmerProject.Controllers
                 {
                     _loginCounterService.Increment();
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Users");
                 }
                 foreach (var error in result.Errors)
                 {
@@ -62,7 +62,7 @@ namespace OmerProject.Controllers
                 if (result.Succeeded)
                 {
                     _loginCounterService.Increment();
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Users");
                 }
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             }
